@@ -220,7 +220,7 @@ A linux script file, ***genansinv.sh***, is providied for this purpose. The scri
 
 ---
 
-A template of the generated Ansible inventory file looks like [this](ansible/hosts).
+A template of the generated Ansible inventory file looks like [this](ansible/hosts.template).
 
 
 ## 4. Extended Ansible Framework for DSE and OpsCenter Installation and Configuration
