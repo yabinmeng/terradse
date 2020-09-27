@@ -33,7 +33,7 @@ Terraform is a great tool to plan, create, and manage infrastructure as code. Th
 
 The infrastructure resources to be lauched is ultimately determined by the target DSE cluster topology. In this repository, a cluster topology like below is used for explanation purpose:
  
-[cluster topology](./aws/resources/cluster.topology.png)
+ <img src="https://github.com/yabinmeng/terradse/blob/master/aws/resources/cluster.topology.png" width=700>
 
 By this topology, there are the following components: 
 * One DSE cluster is a multi-DC (2 DC in the example) DSE cluster dedicated for application usage.
