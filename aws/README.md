@@ -4,6 +4,12 @@
   * Terraform version: 0.13.3
   * Ansible version: 2.9.13
 
+* Updates
+  * Terraform syntax changes for version 0.12 and later.
+  * Modify "genansinv.sh" to reflect terraform.state format change.
+  * Ansible updates that are aligned with changes made in [dseansible](https://github.com/yabinmeng/dseansible) respository.
+
+---
 ---
 
 Previously I came up with a framework (https://github.com/yabinmeng/dseansible) to automate the creation of a multi-DC DSE cluster using Ansible playbook. That framework however doesn't provision the underlying infrastcture and it relies on the  number of the node instances required by the DSE cluster topology to be in place in advance.
