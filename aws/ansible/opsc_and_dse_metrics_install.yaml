@@ -10,13 +10,31 @@
   tasks: 
   - name: Install DSE OpsCenter
     apt:
-      name: "opscenter"
+      name: "opscenter={{ opsc_ver_target }}"
       state: present
       update_cache: yes
+  - name: Configure OpsCenter to enable HTTPS access 
+    replace:
+      name: "/etc/opscenter/opscenterd.conf"
+      regexp: "^#ssl_"
+      replace: "ssl_"
+      owner: opscenter
+      group: opscenter
+      mode: 0644    
+  - name: Configure OpsCenter to enable authentication
+    lineinfile:
+      name: "/etc/opscenter/opscenterd.conf"
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+      owner: opscenter
+      group: opscenter
+      mode: 0644
+    with_items:
+      - { regexp: 'enabled = False', line: 'enabled = True' }
   - name: Start OpsCenter service
     service:
       name: "opscenterd"
-      state: started
+      state: restarted
 
 
 
@@ -94,4 +112,4 @@
     - name: Start datastax-agent service
       service:
         name: "datastax-agent"
-        state: started
+        state: restarted

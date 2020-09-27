@@ -17,6 +17,10 @@ dse_ver_minor: 9
 #dse_ver_minor: 4
 dse_ver_target:  "{{ dse_ver_major }}.{{ dse_ver_minor }}"
 
+#opsc_ver_target: 6.7.8
+opsc_ver_target: 6.8.4
+
+
 ### DSE system file location
 #
 dse_config_dir: /etc/dse/

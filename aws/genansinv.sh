@@ -177,10 +177,10 @@ for ((i=0; i<${#dse_nodetypes[*]}; i++));
 do
    if [[ ${dse_nodetypes[i]} == *"dse_metrics"* ]]; then
       if [[ $seedmarked < $SEED_PER_DC ]]; then
-         pmsg "${public_ips[i]} private_ip=${private_ips[i]} seed=true dc=DC1 rack=RAC1 vnode=1 initial_token=" $DSE_ANSINV_FILE
+         pmsg "${public_ips[i]} private_ip=${private_ips[i]} seed=true dc=dc1 rack=RAC1 vnode=1 initial_token=" $DSE_ANSINV_FILE
          seedmarked=$((seedmarked+1))
       else
-         pmsg "${public_ips[i]} private_ip=${private_ips[i]} seed=false dc=DC1 rack=RAC1 vnode=1 initial_token=" $DSE_ANSINV_FILE
+         pmsg "${public_ips[i]} private_ip=${private_ips[i]} seed=false dc=dc1 rack=RAC1 vnode=1 initial_token=" $DSE_ANSINV_FILE
       fi
    fi
 done
