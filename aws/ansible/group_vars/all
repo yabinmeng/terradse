@@ -1,36 +1,44 @@
 ---
-### Host connection 
-#   - connection type: SSH
-#   - default SSH user 
-#
-ansible_connection: ssh
-ansible_user: ubuntu
+# Home directory for backup 
+backup_homedir: /home/automaton/dse_update_bkup
 
 ### Target/Current DSE verson
-dse_ver_target:  5.1.5
+#   - dse_ver_target:
+#     for fresh install, dse_ver_target is the version to be installed
+#     for upgrade, dse_ver_target is the version to be upgraded to
+#
+#dse_ver_major: 5.1
+#dse_ver_minor: 19
+#dse_ver_major: 6.0
+#dse_ver_minor: 12
+dse_ver_major: 6.7
+dse_ver_minor: 9
+#dse_ver_major: 6.8
+#dse_ver_minor: 4
+dse_ver_target:  "{{ dse_ver_major }}.{{ dse_ver_minor }}"
 
 ### DSE system file location
 #
-dse_config_dir: /etc/dse
+dse_config_dir: /etc/dse/
 dse_default_dir: /etc/default
 dse_syslog_dir: /var/log/cassandra
 
-
 ### Key cassandra.yaml settings
-
 #  DSE VNode setup
 #
-# default vnode token_num setting for DSE Core/Cassandra
-vnode_token_num: 64
-# default vnode token_num setting for DSE Search/Solr
-vnode_token_num_solr: 8
+# default vnode token_num setting for C*
+vnode_token_num: 8
 
 ## DSE cluster name and other configuration items
 #
-data_file_directories: /dse_data/cassandra
-hints_directory: /dse_data/hints
-commitlog_directory: /dse_data/commitlog
-saved_caches_directory: /dse_data/saved_cahces
+cluster_name: MyTestCluster
+dse_data_homedir: /home/automaton/dse_data
+data_file_directories: "{{ dse_data_homedir }}/cassandra"
+commitlog_directory: "{{ dse_data_homedir }}/commitlog"
+saved_caches_directory: "{{ dse_data_homedir }}/saved_cahces"
+hints_directory: "{{ dse_data_homedir }}/hints"
+cdc_raw_directory: "{{ dse_data_homedir }}/cdc_raw"
+metadata_directory: "{{ dse_data_homedir }}/metadata"
 
 
 ## Block device string (xvd...) for the EBS 

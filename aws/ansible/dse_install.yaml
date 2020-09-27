@@ -18,7 +18,7 @@
   become: true
   become_method: sudo
   roles:
-    - { role: java8_inst }
+    - { role: openjdk8_inst }
     - { role: dse_common }
     - { role: dse_instbin }
     - { role: dse_updcfg }

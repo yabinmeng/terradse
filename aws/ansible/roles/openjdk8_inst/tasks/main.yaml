@@ -1,0 +1,9 @@
+---
+- name: Install OpenJDK Java
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - python-apt
+    - openjdk-8-jdk
