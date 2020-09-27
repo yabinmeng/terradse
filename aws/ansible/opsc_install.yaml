@@ -1,0 +1,94 @@
+---
+# Install OpsCenter server
+- hosts: opsc_srv
+  any_errors_fatal: true
+  become: true
+  become_method: sudo
+  roles:
+  - { role: datastax_pkg }
+  - { role: java8_inst }
+  tasks: 
+  - name: Install DSE OpsCenter
+    apt:
+      name: "opscenter"
+      state: present
+      update_cache: yes
+  - name: Start OpsCenter service
+    service:
+      name: "opscenterd"
+      state: started
+
+# Install and configure datastax-agent
+- hosts: datastax_agent 
+  any_errors_fatal: true
+  become: true
+  become_method: sudo
+  roles:
+    - { role: datastax_pkg }
+    - { role: java8_inst }
+  tasks:
+    - name: Install datastax-agent
+      apt:
+        name: "datastax-agent"
+        state: present
+        update_cache: yes
+    - name: Configure stomp_address
+      lineinfile:
+        name: "/var/lib/datastax-agent/conf/address.yaml"
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+      with_items:
+        - { regexp: 'stomp_interface', line: "stomp_interface: {{ opsc_srv_ip }}" }
+    - name: Start datastax-agent service
+      service:
+        name: "datastax-agent"
+        state: started
+
+# Install DSE Core/Cassandra on all Opsc nodes
+- hosts: opsc_dsecore
+  any_errors_fatal: true
+  become: true
+  become_method: sudo
+  roles:
+    - { role: datastax_pkg }
+    - { role: java8_inst }
+    - { role: dse_common }
+    - { role: dse_instbin }
+    - { role: dse_updcfg }
+
+# Start DSE seed nodes
+- hosts: opsc_dsecore
+  any_errors_fatal: true
+  name: Start seed node
+  serial: 1
+  become: true
+  become_method: sudo
+  vars:
+    srvc_name: dse
+  roles:
+    - { role: start_srvc, when: seed == 'true' }
+
+# Start DSE non-seed nodes
+- hosts: opsc_dsecore
+  any_errors_fatal: true
+  name: Start non-seed node one by one
+  serial: 1
+  become: true
+  become_method: sudo
+  vars:
+    srvc_name: dse
+  roles:
+    - { role: start_srvc, when: seed == 'false' }
+
+
+# Check DSE version and C* version
+- hosts: opsc_dse
+  tasks:
+  - name: Check Cassandra version
+    command: "nodetool version"
+    register: _cassandra_ver
+  - name: Check DSE version
+    command: "dse -v"
+    register: _dse_ver
+  - debug:
+     msg: "DSE Version: {{ _dse_ver.stdout }}; Cassandra Version: {{ _cassandra_ver.stdout }}"

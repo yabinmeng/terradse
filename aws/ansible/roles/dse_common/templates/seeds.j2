@@ -1,0 +1,7 @@
+{% set seeds = [] %}
+{% for node in play_hosts %}
+{% if hostvars[node].seed == "true" %}
+{% set ignored = seeds.append( hostvars[node].private_ip ) %}
+{% endif %}
+{% endfor %}
+{{ seeds | join(',') }}

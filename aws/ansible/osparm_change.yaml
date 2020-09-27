@@ -1,0 +1,38 @@
+---
+- hosts: osparmchg
+  any_errors_fatal: true
+  become: true
+  become_method: sudo
+  tasks: 
+  - name: Change SSD device settings 
+    shell: echo "{{ item.value }}" > /sys/block/{{ ebs_devstr }}/queue/"{{ item.parm }}"
+    with_items:
+#    - { parm: 'scheduler', value: 'deadline' }
+    - { parm: 'rotational', value: '0' }
+    - { parm: 'read_ahead_kb', value: '8' }
+  - name: Change OS Kernel parameters by modifying sysctl.conf file
+    lineinfile:
+      name: "/etc/sysctl.conf"
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+    with_items:
+      - { regexp: '^fs.file-max', line: 'fs.file-max = 13100694' }
+      - { regexp: '^net.core.rmem_max', line: 'net.core.rmem_max = 16777216' }
+      - { regexp: '^net.core.wmem_max', line: 'net.core.wmem_max = 16777216' }
+      - { regexp: '^net.core.rmem_default', line: 'net.core.rmem_default = 16777216' }
+      - { regexp: '^net.core.wmem_default', line: 'net.core.wmem_default = 16777216' }
+      - { regexp: '^net.core.optmem_max', line: 'net.core.optmem_max = 40960' }
+      - { regexp: '^net.ipv4.tcp_keepalive_time', line: 'net.ipv4.tcp_keepalive_time = 60' }
+      - { regexp: '^net.ipv4.tcp_keepalive_probes', line: 'net.ipv4.tcp_keepalive_probes = 3' }
+      - { regexp: '^net.ipv4.tcp_keepalive_intvl', line: 'net.ipv4.tcp_keepalive_intvl = 10' }
+      - { regexp: '^net.ipv4.tcp_rmem', line: 'net.ipv4.tcp_rmem = 4096 87380 16777216' }
+      - { regexp: '^net.ipv4.tcp_wmem', line: 'net.ipv4.tcp_wmem = 4096 65536 16777216' }
+      - { regexp: '^vm.zone_reclaim_mode', line: 'vm.zone_reclaim_mode = 0' }
+      - { regexp: '^vm.max_map_count', line: 'vm.max_map_count = 1048575' }
+      - { regexp: '^vm.swappiness', line: 'vm.swappiness = 1' }
+    notify:
+      - reload sysctl.conf
+  handlers:
+    - name: reload sysctl.conf
+      command: /sbin/sysctl -p
+

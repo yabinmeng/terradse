@@ -1,0 +1,38 @@
+---
+### Host connection 
+#   - connection type: SSH
+#   - default SSH user 
+#
+ansible_connection: ssh
+ansible_user: ubuntu
+
+### Target/Current DSE verson
+dse_ver_target:  5.1.5
+
+### DSE system file location
+#
+dse_config_dir: /etc/dse
+dse_default_dir: /etc/default
+dse_syslog_dir: /var/log/cassandra
+
+
+### Key cassandra.yaml settings
+
+#  DSE VNode setup
+#
+# default vnode token_num setting for DSE Core/Cassandra
+vnode_token_num: 64
+# default vnode token_num setting for DSE Search/Solr
+vnode_token_num_solr: 8
+
+## DSE cluster name and other configuration items
+#
+data_file_directories: /dse_data/cassandra
+hints_directory: /dse_data/hints
+commitlog_directory: /dse_data/commitlog
+saved_caches_directory: /dse_data/saved_cahces
+
+
+## Block device string (xvd...) for the EBS 
+#    volume attached for DSE data
+ebs_devstr: xvda
