@@ -88,7 +88,7 @@ variable "instance_type" {
 When provisioning the required AWS EC2 instances for a specific DC, the type and count is determined through a map search as in the example below:
 ```
 #
-# EC2 instances for DSE cluster, "DSE Search" DC
+# EC2 instances for DSE application cluster, dc1
 # 
 resource "aws_instance" "dse_app_dc1" {
    ... ...
@@ -175,7 +175,7 @@ data "template_file" "user_data" {
               EOF
 }
 
-resource "aws_instance" "dse_search" {
+resource "aws_instance" "dse_app_dc1" {
    ... ...
    user_data = data.template_file.user_data.rendered
    ... ...
