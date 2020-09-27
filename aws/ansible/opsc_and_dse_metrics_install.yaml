@@ -45,7 +45,7 @@
         state: started
 
 # Install DSE Core/Cassandra on all Opsc nodes
-- hosts: opsc_dsecore
+- hosts: dse_metrics
   any_errors_fatal: true
   become: true
   become_method: sudo
@@ -57,7 +57,7 @@
     - { role: dse_updcfg }
 
 # Start DSE seed nodes
-- hosts: opsc_dsecore
+- hosts: dse_metrics
   any_errors_fatal: true
   name: Start seed node
   serial: 1
@@ -69,7 +69,7 @@
     - { role: start_srvc, when: seed == 'true' }
 
 # Start DSE non-seed nodes
-- hosts: opsc_dsecore
+- hosts: dse_metrics
   any_errors_fatal: true
   name: Start non-seed node one by one
   serial: 1
@@ -82,7 +82,7 @@
 
 
 # Check DSE version and C* version
-- hosts: opsc_dse
+- hosts: dse_metrics
   tasks:
   - name: Check Cassandra version
     command: "nodetool version"

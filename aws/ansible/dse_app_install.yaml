@@ -1,6 +1,6 @@
 ---
 # Get the current timestamp and register datastx debian packages
-- hosts: dse
+- hosts: dse_app
   any_errors_fatal: true
   become: true
   become_method: sudo
@@ -13,7 +13,7 @@
 
 
 # Install and configure DSE
-- hosts: dse
+- hosts: dse_app
   any_errors_fatal: true
   become: true
   become_method: sudo
@@ -24,7 +24,7 @@
     - { role: dse_updcfg }
 
 # Start DSE seed nodes 
-- hosts: dse
+- hosts: dse_app
   any_errors_fatal: true
   name: Start seed node 
   serial: 1
@@ -36,7 +36,7 @@
     - { role: start_srvc, when: seed == 'true' } 
 
 # Start DSE non-seed nodes 
-- hosts: dse
+- hosts: dse_app
   any_errors_fatal: true
   name: Start non-seed node one by one
   serial: 1
@@ -49,7 +49,7 @@
 
 
 # Check DSE version and C* version
-- hosts: dse
+- hosts: dse_
   tasks:
   - name: Check Cassandra version
     command: "nodetool version"

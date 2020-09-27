@@ -6,7 +6,6 @@
 
 - name: Wait for Cassandra process is up and running
   wait_for:
-    host: "{{ ansible_host }}"
+    host: "{{ private_ip }}"
     port: 9042
     delay: 1
-    timeout: 300

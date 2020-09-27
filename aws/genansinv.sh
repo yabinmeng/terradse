@@ -49,9 +49,8 @@ do
       dse_nodetypes+=("$typestr2")
    fi
 
-#echo "$line"
    if [[ $line == *"private_ip"* ]]; then
-      ## exclude "secondary_private_ipss"
+      ## exclude "secondary_private_ips"
       if [[ $line != *"ips"* ]]; then
          prv_ip="${line##* = }"
          ## remove all occurence of character '#'
@@ -143,7 +142,7 @@ do
       dc_name=$(echo "${dse_nodetypes[i]}" | cut -d'.' -f1 | cut -d'_' -f3 )
 
       if [[ $seedmarked < $SEED_PER_DC ]]; then
-         pmsg "${public_ips[i]} private_ips=${private_ips[i]} seed=true dc=$dc_name rack=RAC1 vnode=1 initial_token=" $DSE_ANSINV_FILE
+         pmsg "${public_ips[i]} private_ip=${private_ips[i]} seed=true dc=$dc_name rack=RAC1 vnode=1 initial_token=" $DSE_ANSINV_FILE
          seedmarked=$((seedmarked+1))
       else
          pmsg "${public_ips[i]} private_ip=${private_ips[i]} seed=false dc=$dc_name rack=RAC1 vnode=1 initial_token=" $DSE_ANSINV_FILE
@@ -206,7 +205,7 @@ do
    if [[ ${dse_nodetypes[i]} == *"opsc_srv"* ]]; then
       # only install OpsCenter server on one host
       if [[ $opscsrvmarked == 0 ]]; then
-         opscSrvNodeStr="${public_ips[i]} private_ips=${private_ips[i]}" 
+         opscSrvNodeStr="${public_ips[i]} private_ip=${private_ips[i]}" 
          opscSrvPrivateIp="${private_ips[i]}"
          opscsrvmarked=1
       fi
@@ -224,7 +223,7 @@ pmsg "[datastax_agent]" $DSE_ANSINV_FILE
 for ((i=0; i<${#dse_nodetypes[*]}; i++));
 do
    if [[ ${dse_nodetypes[i]} != *"opsc_srv"* ]]; then
-      pmsg "${public_ips[i]} private_ips=${private_ips[i]} opsc_srv_ip=$opscSrvPrivateIp" $DSE_ANSINV_FILE
+      pmsg "${public_ips[i]} private_ip=${private_ips[i]} opsc_srv_ip=$opscSrvPrivateIp" $DSE_ANSINV_FILE
    fi
 done
 pmsg "" $DSE_ANSINV_FILE
