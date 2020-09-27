@@ -3,14 +3,14 @@ dse_app_dc1
 dse_app_dc2
 
 [dse_app_dc1]
-<dse_app_dc1_srv1_public_ip> private_ip=<dse_app_dc1_srv1_private_ip> seed=true dc=dse_core rack=RAC1 vnode=8 initial_token=
-<dse_app_dc1_srv2_public_ip> private_ip=<dse_app_dc1_srv2_private_ip> seed=false dc=dse_core rack=RAC1 vnode=8 initial_token=
-<dse_app_dc1_srv3_public_ip> private_ip=<dse_app_dc1_srv3_private_ip> seed=false dc=dse_core rack=RAC1 vnode=8 initial_token=
+<dse_app_dc1_srv1_public_ip> private_ip=<dse_app_dc1_srv1_private_ip> seed=true dc=dc1 rack=RAC1 vnode=8 initial_token=
+<dse_app_dc1_srv2_public_ip> private_ip=<dse_app_dc1_srv2_private_ip> seed=false dc=dc1 rack=RAC1 vnode=8 initial_token=
+<dse_app_dc1_srv3_public_ip> private_ip=<dse_app_dc1_srv3_private_ip> seed=false dc=dc1 rack=RAC1 vnode=8 initial_token=
 
 [dse_app_dc2]
-<dse_app_dc2_srv1_public_ip> private_ip=<dse_app_dc2_srv1_private_ip> seed=true dc=dse_search rack=RAC1 vnode=8 initial_token=
-<dse_app_dc2_srv2_public_ip> private_ip=<dse_app_dc2_srv2_private_ip> seed=false dc=dse_search rack=RAC1 vnode=8 initial_token=
-<dse_app_dc2_srv3_public_ip> private_ip=<dse_app_dc2_srv3_private_ip> seed=false dc=dse_search rack=RAC1 vnode=8 initial_token=
+<dse_app_dc2_srv1_public_ip> private_ip=<dse_app_dc2_srv1_private_ip> seed=true dc=dc2 rack=RAC1 vnode=8 initial_token=
+<dse_app_dc2_srv2_public_ip> private_ip=<dse_app_dc2_srv2_private_ip> seed=false dc=dc2 rack=RAC1 vnode=8 initial_token=
+<dse_app_dc2_srv3_public_ip> private_ip=<dse_app_dc2_srv3_private_ip> seed=false dc=dc2 rack=RAC1 vnode=8 initial_token=
 
 [dse_app:vars]
 cluster_name=MyAppCluster
@@ -30,8 +30,8 @@ auto_bootstrap=1
 
 
 [dse_metrics]
-<dse_metrics_srv1_public_ip> private_ip=<dse_metrics_srv1_private_ip> seed=true dc=DC1 rack=RAC1 vnode=8 initial_token=
-<dse_metrics_srv2_public_ip> private_ip=<dse_metrics_srv2_private_ip> seed=false dc=DC1 rack=RAC1 vnode=8 initial_token=
+<dse_metrics_srv1_public_ip> private_ip=<dse_metrics_srv1_private_ip> seed=true dc=dc1 rack=RAC1 vnode=8 initial_token=
+<dse_metrics_srv2_public_ip> private_ip=<dse_metrics_srv2_private_ip> seed=false dc=dc1 rack=RAC1 vnode=8 initial_token=
 
 [dse_metrics:vars]
 cluster_name=OpscCluster

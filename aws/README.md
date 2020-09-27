@@ -8,6 +8,7 @@
   * Terraform syntax changes for version 0.12 and later.
   * Modify "genansinv.sh" to reflect terraform.state format change.
   * Ansible updates that are aligned with changes made in [dseansible](https://github.com/yabinmeng/dseansible) respository.
+  * Separate and dedicated OpsCenter server (instead of using the first DSE metrics cluster node)
 
 ---
 ---
@@ -32,7 +33,7 @@ Terraform is a great tool to plan, create, and manage infrastructure as code. Th
 
 The infrastructure resources to be lauched is ultimately determined by the target DSE cluster topology. In this repository, a cluster topology like below is used for explanation purpose:
  
-![cluster topology](https://github.com/yabinmeng/terradse/blob/master/resources/cluster.topology.png)
+![cluster topology](https://github.com/yabinmeng/terradse/aws/blob/master/resources/cluster.topology.png)
 
 By this topology, there are 2 DSE clusters. 
 * One cluster is a multi-DC (2 DC in the example) DSE cluster dedicated for application usage.

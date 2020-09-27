@@ -123,7 +123,7 @@ seedmarked=0
 for ((i=0; i<${#dse_nodetypes[*]}; i++));
 do
    if [[ ${dse_nodetypes[i]} == *"dse_app_dc1"* ]]; then
-      dc_name=$(cut -d'.' -f1 <<< "${dse_nodetypes[i]}")
+      dc_name=$(echo "${dse_nodetypes[i]}" | cut -d'.' -f1 | cut -d'_' -f3 )
 
       if [[ $seedmarked < $SEED_PER_DC ]]; then
          pmsg "${public_ips[i]} private_ip=${private_ips[i]} seed=true dc=$dc_name rack=RAC1 vnode=8 initial_token=" $DSE_ANSINV_FILE
@@ -140,7 +140,7 @@ seedmarked=0
 for ((i=0; i<${#dse_nodetypes[*]}; i++));
 do
    if [[ ${dse_nodetypes[i]} == *"dse_app_dc2"* ]]; then
-      dc_name=$(cut -d'.' -f1 <<< "${dse_nodetypes[i]}")
+      dc_name=$(echo "${dse_nodetypes[i]}" | cut -d'.' -f1 | cut -d'_' -f3 )
 
       if [[ $seedmarked < $SEED_PER_DC ]]; then
          pmsg "${public_ips[i]} private_ips=${private_ips[i]} seed=true dc=$dc_name rack=RAC1 vnode=8 initial_token=" $DSE_ANSINV_FILE
@@ -176,8 +176,7 @@ opscsrvmarked=0
 seedmarked=0
 for ((i=0; i<${#dse_nodetypes[*]}; i++));
 do
-   #if [[ ${dse_nodetypes[i]} == *"dse_metrics"* ]]; then
-   if [[ ${dse_nodetypes[i]} == *"dse_opsc"* ]]; then
+   if [[ ${dse_nodetypes[i]} == *"dse_metrics"* ]]; then
       if [[ $seedmarked < $SEED_PER_DC ]]; then
          pmsg "${public_ips[i]} private_ip=${private_ips[i]} seed=true dc=DC1 rack=RAC1 vnode=8 initial_token=" $DSE_ANSINV_FILE
          seedmarked=$((seedmarked+1))
