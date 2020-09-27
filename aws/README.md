@@ -35,9 +35,10 @@ The infrastructure resources to be lauched is ultimately determined by the targe
  
 ![cluster topology](https://github.com/yabinmeng/terradse/aws/blob/master/resources/cluster.topology.png)
 
-By this topology, there are 2 DSE clusters. 
-* One cluster is a multi-DC (2 DC in the example) DSE cluster dedicated for application usage.
-* Another cluster is a single-DC DSE cluster dedicated for monitoring purpose through DataStax OpsCenter.
+By this topology, there ares: 
+* One DSE cluster is a multi-DC (2 DC in the example) DSE cluster dedicated for application usage.
+* Another DSE cluster is a single-DC DSE cluster dedicated for monitoring purpose through DataStax OpsCenter.
+* One single instance that hosts OpsCenter server.
 
 Currently, the number of nodes per DC is configurable through Terraform variables. The number of DCs per cluster is fixed at 2 for application cluster and 1 for the monitoring cluster. However, it can be easily expanded to other settings depending on your unique application needs.
 
@@ -63,21 +64,23 @@ In order to run the terraform script sucessfully, the following procedures need 
 The number and type of AWS EC2 instances are determined at DataCenter (DC) level through terraform variable mappings, with each DC has its own instance type and count as determined by the target DSE cluster topology. The example for the example cluster topology is as below:
 ```
 variable "instance_count" {
-   type = "map"
+   type = map
    default = {
-      opsc      = 1
-      cassandra = 3
-      solr      = 3
+      opsc_srv    = 1
+      dse_metrics = 2
+      dse_app_dc1 = 3
+      dse_app_dc2 = 3
    }
 }
 
 variable "instance_type" {
-   type = "map"
+   type = map
    default = {
+      opsc_srv   =  "t2.2xlarge"  
       // t2.2xlarge is the minimal DSE requirement
-      opsc      = "t2.2xlarge"
-      cassandra = "t2.2xlarge"
-      solr      = "t2.2xlarge"
+      dse_metrics = "t2.2xlarge"
+      dse_app_dc1 = "t2.2xlarge"
+      dse_app_dc2 = "t2.2xlarge"
    }
 }
 ```
@@ -87,10 +90,10 @@ When provisioning the required AWS EC2 instances for a specific DC, the type and
 #
 # EC2 instances for DSE cluster, "DSE Search" DC
 # 
-resource "aws_instance" "dse_search" {
+resource "aws_instance" "dse_app_dc1" {
    ... ...
-   instance_type   = "${lookup(var.instance_type, var.dse_search_type)}"
-   count           = "${lookup(var.instance_count, var.dse_search_type)}"
+   instance_type   = lookup(var.instance_type, var.dse_app_dc1_type)
+   count           = lookup(var.instance_count, var.dse_app_dc1_type)
    ... ...
 }
 ```
@@ -100,11 +103,16 @@ resource "aws_instance" "dse_search" {
 The script also creates an AWS key-pair resource that can be associated with the EC2 instances. The AWS key-pair resource is created from a locally generated SSH public key and the corresponding private key can be used to log into the EC2 instances.
 ```
 resource "aws_key_pair" "dse_terra_ssh" {
-    key_name = "${var.keyname}"
-    public_key = "${file("${var.ssh_key_localpath}/${var.ssh_key_filename}.pub")}"
+    key_name = var.keyname
+    public_key = file("${var.ssh_key_localpath}/${var.ssh_key_filename}.pub")
+
+    tags = {
+        Name         = "${var.tag_identifier}-dse_terra_ssh"
+        Environment  = var.env 
+   }
 }
 
-resource "aws_instance" "dse_search" {
+resource "aws_instance" "dse_app_dc1" {
    ... ...
    key_name        = "${aws_key_pair.dse_terra_ssh.key_name}"
    ... ... 
@@ -145,9 +153,9 @@ resource "aws_security_group" "sg_ssh" {
 
 ... ... // other security group definitions
 
-resource "aws_instance" "dse_search" {
+resource "aws_instance" "dse_app_dc1" {
    ... ...
-   vpc_security_group_ids = ["${aws_security_group.sg_internal_only.id}","${aws_security_group.sg_ssh.id}","${aws_security_group.sg_dse_node.id}"]
+   vpc_security_group_ids = [aws_security_group.sg_internal_only.id,aws_security_group.sg_ssh.id,aws_security_group.sg_dse_node.id]
    ... ...
 }
 ```
@@ -191,11 +199,11 @@ Now since we have provisioned the instances using terraform script, it is possib
   terraform show terraform/terraform.tfstate > $TFSTATE_FILE
 ```
 
-2. Scan the terraform output state text file to generate a file that contains each instance's target DC tag, public IP, and private IP. An example is provided in this repository at: [dse_ec2IpList](https://github.com/yabinmeng/terradse/blob/master/dse_ec2IpList)
+2. Scan the terraform output state text file to generate a file that contains each instance's target DC tag, public IP, and private IP.
 
-3. The same IP list information can also be used to generate the required Ansible inventory file. In the script, the first node in any DSE DC is automatically picked as the seed node. An example of the generated Ansible inventory file is provided in this repository: [dse_ansHosts](https://github.com/yabinmeng/terradse/blob/master/dse_ansHosts)
+3. The same IP list information can also be used to generate the required Ansible inventory file. In the script, the first node in any DSE DC is automatically picked as the seed node. 
 
-A linux script file, ***genansinv.sh***, is providied for this purpose. The script has 3 configurable parameters, either through input arguments or script variables. These parameters will impact the target DSE cluster topology information (as presented in the Ansible inventory file) a bit. Please adjust accordingly for your own case.
+A linux script file, ***genansinv.sh***, is providied for this purpose. The script has 3 input parameters, either through input arguments or script variables. These parameters will impact the target DSE cluster topology information (as presented in the Ansible inventory file) a bit. Please adjust accordingly for your own case.
 
 1. Script input argument: number of seed nodes per DC, default at 1
 ```
