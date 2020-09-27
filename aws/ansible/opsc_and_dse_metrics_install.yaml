@@ -6,7 +6,7 @@
   become_method: sudo
   roles:
   - { role: datastax_pkg }
-  - { role: java8_inst }
+  - { role: openjdk8_inst }
   tasks: 
   - name: Install DSE OpsCenter
     apt:
@@ -18,40 +18,16 @@
       name: "opscenterd"
       state: started
 
-# Install and configure datastax-agent
-- hosts: datastax_agent 
-  any_errors_fatal: true
-  become: true
-  become_method: sudo
-  roles:
-    - { role: datastax_pkg }
-    - { role: java8_inst }
-  tasks:
-    - name: Install datastax-agent
-      apt:
-        name: "datastax-agent"
-        state: present
-        update_cache: yes
-    - name: Configure stomp_address
-      lineinfile:
-        name: "/var/lib/datastax-agent/conf/address.yaml"
-        regexp: "{{ item.regexp }}"
-        line: "{{ item.line }}"
-      with_items:
-        - { regexp: 'stomp_interface', line: "stomp_interface: {{ opsc_srv_ip }}" }
-    - name: Start datastax-agent service
-      service:
-        name: "datastax-agent"
-        state: started
 
-# Install DSE Core/Cassandra on all Opsc nodes
+
+# Install DSE Core/Cassandra on all DSE metrics cluster node
 - hosts: dse_metrics
   any_errors_fatal: true
   become: true
   become_method: sudo
   roles:
     - { role: datastax_pkg }
-    - { role: java8_inst }
+    - { role: openjdk8_inst }
     - { role: dse_common }
     - { role: dse_instbin }
     - { role: dse_updcfg }
@@ -80,7 +56,6 @@
   roles:
     - { role: start_srvc, when: seed == 'false' }
 
-
 # Check DSE version and C* version
 - hosts: dse_metrics
   tasks:
@@ -92,3 +67,31 @@
     register: _dse_ver
   - debug:
      msg: "DSE Version: {{ _dse_ver.stdout }}; Cassandra Version: {{ _cassandra_ver.stdout }}"
+
+
+
+# Install and configure datastax-agent on ALL DSE nodes (both application cluster and metrics cluster)
+- hosts: datastax_agent 
+  any_errors_fatal: true
+  become: true
+  become_method: sudo
+  roles:
+    - { role: datastax_pkg }
+    - { role: openjdk8_inst }
+  tasks:
+    - name: Install datastax-agent
+      apt:
+        name: "datastax-agent"
+        state: present
+        update_cache: yes
+    - name: Configure stomp_address
+      lineinfile:
+        name: "/var/lib/datastax-agent/conf/address.yaml"
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+      with_items:
+        - { regexp: 'stomp_interface', line: "stomp_interface: {{ opsc_srv_ip }}" }
+    - name: Start datastax-agent service
+      service:
+        name: "datastax-agent"
+        state: started

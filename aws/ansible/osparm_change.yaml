@@ -10,6 +10,7 @@
 #    - { parm: 'scheduler', value: 'deadline' }
     - { parm: 'rotational', value: '0' }
     - { parm: 'read_ahead_kb', value: '8' }
+    - { parm: 'nr_requests', value: '128' }
   - name: Change OS Kernel parameters by modifying sysctl.conf file
     lineinfile:
       name: "/etc/sysctl.conf"
