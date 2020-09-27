@@ -224,7 +224,7 @@ A linux script file, ***genansinv.sh***, is providied for this purpose. The scri
 Compared with the previous Ansible framework of installing and configuring DSE clusters, the version in this repository has extended features (through new Ansible playbooks):
 
 1. *dse_install.yml*: installs and configures a multi-DC DSE cluster. This is the same functionality as the previous version.
-2. *opsc_install.yml": installs OpsCenter server, datastax-agents, and configures accordingly to allow proper communication between OpsCenter server and datastax-agents.
+2. *opsc_install.yml*: installs OpsCenter server, datastax-agents, and configures accordingly to allow proper communication between OpsCenter server and datastax-agents.
 3. *osparm_change.yml*: configures OS/Kernel parameters on each node where DSE is installed, as per [Recommended production settings](https://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/config/configRecommendedSettings.html) from DataStax documentation.
 
 For operational simplicity, a linux script file, ***runansi.sh***, is provided to execute these Ansible playbooks.
