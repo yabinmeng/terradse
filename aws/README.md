@@ -35,7 +35,7 @@ The infrastructure resources to be lauched is ultimately determined by the targe
  
 ![cluster topology](https://github.com/yabinmeng/terradse/aws/blob/master/resources/cluster.topology.png)
 
-By this topology, there ares: 
+By this topology, there are the following components: 
 * One DSE cluster is a multi-DC (2 DC in the example) DSE cluster dedicated for application usage.
 * Another DSE cluster is a single-DC DSE cluster dedicated for monitoring purpose through DataStax OpsCenter.
 * One single instance that hosts OpsCenter server.
