@@ -17,6 +17,8 @@
   any_errors_fatal: true
   become: true
   become_method: sudo
+  vars:
+    cluster_name: MyDSEAppTestCluster
   roles:
     - { role: openjdk8_inst }
     - { role: dse_common }

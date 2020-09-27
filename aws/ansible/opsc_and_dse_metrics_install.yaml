@@ -43,6 +43,8 @@
   any_errors_fatal: true
   become: true
   become_method: sudo
+  vars:
+    cluster_name: MyDSEMetricsTestCluster
   roles:
     - { role: datastax_pkg }
     - { role: openjdk8_inst }
