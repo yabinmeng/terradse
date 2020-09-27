@@ -49,7 +49,7 @@
 
 
 # Check DSE version and C* version
-- hosts: dse_
+- hosts: dse_app
   tasks:
   - name: Check Cassandra version
     command: "nodetool version"
