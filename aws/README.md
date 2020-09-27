@@ -114,7 +114,7 @@ resource "aws_key_pair" "dse_terra_ssh" {
 
 resource "aws_instance" "dse_app_dc1" {
    ... ...
-   key_name        = "${aws_key_pair.dse_terra_ssh.key_name}"
+   key_name          = aws_key_pair.dse_terra_ssh.key_name
    ... ... 
 }
 ```
@@ -177,7 +177,7 @@ data "template_file" "user_data" {
 
 resource "aws_instance" "dse_search" {
    ... ...
-   user_data = "${data.template_file.user_data.rendered}"
+   user_data = data.template_file.user_data.rendered
    ... ...
 }
 ```
