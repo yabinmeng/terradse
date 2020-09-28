@@ -8,7 +8,7 @@
   * Terraform syntax changes for version 0.12 and later.
   * Modify "genansinv.sh" to reflect terraform.state format change.
   * Ansible updates that are aligned with changes made in [dseansible](https://github.com/yabinmeng/dseansible) respository.
-  * Separate and dedicated OpsCenter server (instead of using the first DSE metrics cluster node)
+  * Use a separate and dedicated OpsCenter server (instead of using the first DSE metrics cluster node)
 
 ---
 ---
@@ -122,8 +122,8 @@ resource "aws_instance" "dse_app_dc1" {
 #### 2.2.3. Security Group
 
 In order for the DSE cluster and OpsCenter to work properly, certain ports on the ec2 instances have to be open, as per the following DataStax documents:
-* [Securing DataStax Enterprise ports](https://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/security/secFirewallPorts.html)
-* [OpsCenter ports reference](https://docs.datastax.com/en/opscenter/6.1/opsc/reference/opscLcmPorts.html)
+* [Securing DataStax Enterprise ports](https://docs.datastax.com/en/security/6.8/security/secFirewallPorts.html)
+* [OpsCenter ports reference](https://docs.datastax.com/en/opscenter/6.8/opsc/reference/opscLcmPorts.html)
 
 The script does so by creating the following AWS security group resources:
 1. sg_ssh: allows SSH access from public
@@ -220,7 +220,7 @@ A linux script file, ***genansinv.sh***, is providied for this purpose. The scri
 
 ---
 
-A template of the generated Ansible inventory file looks like [this](ansible/hosts.template).
+A template of the generated Ansible inventory file looks like [this](aws//ansible/hosts.template).
 
 
 ## 4. Extended Ansible Framework for DSE and OpsCenter Installation and Configuration
@@ -229,6 +229,6 @@ Compared with the previous Ansible framework of installing and configuring DSE c
 
 1. *dse_install.yml*: installs and configures a multi-DC DSE cluster. This is the same functionality as the previous version.
 2. *opsc_install.yml*: installs OpsCenter server, datastax-agents, and configures accordingly to allow proper communication between OpsCenter server and datastax-agents.
-3. *osparm_change.yml*: configures OS/Kernel parameters on each node where DSE is installed, as per [Recommended production settings](https://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/config/configRecommendedSettings.html) from DataStax documentation.
+3. *osparm_change.yml*: configures OS/Kernel parameters on each node where DSE is installed, as per [Recommended production settings](https://docs.datastax.com/en/dse/6.8/dse-dev/datastax_enterprise/config/configRecommendedSettings.html) from DataStax documentation.
 
 For operational simplicity, a linux script file, ***runansi.sh***, is provided to execute these Ansible playbooks.
