@@ -4,7 +4,7 @@
     name: "{{ dse_repo_file }}"
     create: yes
     regexp: 'debian\.datastax\.com\/enterprise'
-    line: "deb https://{{ dse_repo_email }}:{{ dse_repo_password }}@debian.datastax.com/enterprise stable main"
+    line: "deb https://debian.datastax.com/enterprise stable main"
     state: present
 
 - name: Add the DataStax repository key
