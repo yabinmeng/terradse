@@ -3,12 +3,13 @@
 # - open opscenter-agent ports
 #
 resource "aws_security_group" "sg_internal_only" {
-    name = "sg_internal_only"
+   name     = "sg_internal_only"
+   vpc_id   = aws_vpc.vpc_dse.id
 
-    tags = {
-        Name         = "${var.tag_identifier}-sg_internal_only"
-        Environment  = var.env 
-    }
+   tags     = {
+      Name         = "${var.tag_identifier}-sg_internal_only"
+      Environment  = var.env 
+   }
 }
 
 
@@ -17,12 +18,13 @@ resource "aws_security_group" "sg_internal_only" {
 # - open SSH port (22) from anywhere
 #
 resource "aws_security_group" "sg_ssh" {
-    name = "sg_ssh"
+   name     = "sg_ssh"
+   vpc_id   = aws_vpc.vpc_dse.id
 
-    tags = {
-        Name         = "${var.tag_identifier}-sg_ssh"
-        Environment  = var.env 
-    }
+   tags     = {
+      Name         = "${var.tag_identifier}-sg_ssh"
+      Environment  = var.env 
+   }
 
    ingress {
       from_port = 22
@@ -45,12 +47,13 @@ resource "aws_security_group" "sg_ssh" {
 #   (assuming OpsCenter web access is enabled)
 #
 resource "aws_security_group" "sg_opsc_web" {
-    name = "sg_opsc_web"
+   name     = "sg_opsc_web"
+   vpc_id   = aws_vpc.vpc_dse.id
 
-    tags = {
-        Name         = "${var.tag_identifier}-sg_opsc_web"
-        Environment  = var.env 
-    }
+   tags     = {
+      Name         = "${var.tag_identifier}-sg_opsc_web"
+      Environment  = var.env 
+   }
 
    # OpsCenter server HTTPS port
    ingress {
@@ -74,12 +77,13 @@ resource "aws_security_group" "sg_opsc_web" {
 # - Ports required for proper OpsCenter/Datastax-agent function
 #
 resource "aws_security_group" "sg_opsc_node" {
-   name = "sg_opsc_node"
+   name     = "sg_opsc_node"
+   vpc_id   = aws_vpc.vpc_dse.id
 
-    tags = {
-        Name         = "${var.tag_identifier}-sg_opsc_node"
-        Environment  = var.env 
-    }
+   tags     = {
+      Name         = "${var.tag_identifier}-sg_opsc_node"
+      Environment  = var.env 
+   }
 
    # Outbound: allow everything to everywhere
    egress {
@@ -143,12 +147,13 @@ resource "aws_security_group" "sg_opsc_node" {
 # - Ports required for proper DSE function
 #
 resource "aws_security_group" "sg_dse_node" {
-   name = "sg_dse_node"
+   name     = "sg_dse_node"
+   vpc_id   = aws_vpc.vpc_dse.id
 
-    tags = {
-        Name         = "${var.tag_identifier}-sg_dse_node"
-        Environment  = var.env 
-    }
+   tags     = {
+      Name         = "${var.tag_identifier}-sg_dse_node"
+      Environment  = var.env 
+   }
 
    # Outbound: allow everything to everywhere
    egress {

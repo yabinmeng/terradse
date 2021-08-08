@@ -3,6 +3,7 @@
 terradse.code-workspace
 gcp/
 aws/ansible/hosts
-aws/terraform/terraform.tfstate
 aws/terraform/.terraform
+aws/terraform/.terraform.lock.hcl
 aws/terraform/terraform.tfstate
+aws/terraform/terraform.tfstate.backup

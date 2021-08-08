@@ -2,7 +2,7 @@
 # The local directory where the SSH key files are stored
 #
 variable "ssh_key_localpath" {
-   default = "<local_ssh_key_file_folder>"
+   default = "~/.ssh"
 }
 
 #
@@ -45,7 +45,7 @@ variable "ami_id" {
 # AWS resource tag identifier
 #
 variable "tag_identifier" {
-   default = "ymtest"
+   default = "zzzTest"
 } 
 
 #
@@ -53,6 +53,23 @@ variable "tag_identifier" {
 #
 variable "env" {
    default = "automation_test"
+}
+
+## CIDR for VPC and subnets
+variable "vpc_cidr_str_vpc" {
+   default = "191.100.0.0/16"
+}
+variable "vpc_cidr_str_opsc" {
+   default = "191.100.0.0/24"
+}
+variable "vpc_cidr_str_cassmetr" {
+   default = "191.100.10.0/24"
+}
+variable "vpc_cidr_str_cassapp" {
+   default = "191.100.20.0/24"
+}
+variable "vpc_cidr_str_solrspark" {
+   default = "191.100.30.0/24"
 }
 
 #
@@ -81,7 +98,7 @@ variable "instance_count" {
    type = map
    default = {
       opsc_srv    = 1
-      dse_metrics = 2
+      dse_metrics = 3
       dse_app_dc1 = 3
       dse_app_dc2 = 3
    }
