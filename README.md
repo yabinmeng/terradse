@@ -30,8 +30,9 @@
 
 **Updates on ***08/08/2021*****
 
-* Retested with: 1.0.3
-  * Terraform version: 2.11.3
+* Retested with: 
+  * Terraform 1.0.3
+  * Ansible version: 2.11.3
 
 * Updates
   * Add Terraform support for custom VPC and subnets 
